@@ -31,7 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\SerialColumn'],
 
                 'name',
-                'data',
+                //'data',
+                // Solution for htmlspecialchars() expects parameter 1 to be string, resource given
+                [
+                    'label' => 'data',
+                    'format' => 'raw',
+                    'value' => 'data'
+                ],             
                 'created_at:datetime',
                 'updated_at:datetime',
 
