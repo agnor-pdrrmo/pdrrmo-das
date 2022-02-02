@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Date update',
                 'value' => 'type0.doc_name',            
             ],    
-            //['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

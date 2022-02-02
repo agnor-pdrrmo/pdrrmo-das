@@ -6,6 +6,7 @@ use Yii;
 use backend\Models\Documents;
 use backend\Models\DocumentsSearch;
 use backend\Models\Files;
+use yii\web\ForbiddenHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -203,9 +204,12 @@ class DocumentsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        if (Yii::$app->user->can('administrator')) {
+            $this->findModel($id)->delete();
+            return $this->redirect(['index']);
+        } else {
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.')); 
+        }
     }
 
     /**

@@ -38,7 +38,7 @@ class RbacAuthRuleController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => RbacAuthRule::find(),
         ]);
-
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);

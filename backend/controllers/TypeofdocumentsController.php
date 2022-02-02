@@ -2,8 +2,10 @@
 
 namespace backend\controllers;
 
+use Yii;
 use backend\models\Typeofdocuments;
 use backend\models\TypeofdocumentsSearch;
+use yii\web\ForbiddenHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -110,9 +112,13 @@ class TypeofdocumentsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        if (Yii::$app->user->can('administrator')) {
+            $this->findModel($id)->delete();
+            return $this->redirect(['index']);
+        } else {
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.')); 
+        }
+        
     }
 
     /**
