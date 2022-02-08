@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="documents-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?>
@@ -26,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     
-   
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -86,16 +84,32 @@ $this->params['breadcrumbs'][] = $this->title;
                      return $userProfile->userProfile->getFullName();
                 },           
             ],
-            [       
+            [
                 'attribute' => 'created_at',
-                'label' => 'Date upload',
-                'value' => 'type0.doc_name',            
-            ], 
-            [       
+                'value' => function($model){
+                    return date("d-M-Y",  strtotime($model->created_at));
+                },
+                'filter' => \yii\jui\DatePicker::widget([
+                    'model'=>$searchModel,
+                    'attribute'=>'created_at',
+                    'language' => 'eng',
+                    'dateFormat' => 'yyyy-MM-dd',
+                ]),
+                'format' => 'html',
+            ],   
+            [
                 'attribute' => 'updated_at',
-                'label' => 'Date update',
-                'value' => 'type0.doc_name',            
-            ],    
+                'value' => function($model){
+                    return date("d-M-Y",  strtotime($model->updated_at));
+                },
+                'filter' => \yii\jui\DatePicker::widget([
+                    'model'=>$searchModel,
+                    'attribute'=>'updated_at',
+                    'language' => 'eng',
+                    'dateFormat' => 'yyyy-MM-dd',
+                ]),
+                'format' => 'html',
+            ], 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
