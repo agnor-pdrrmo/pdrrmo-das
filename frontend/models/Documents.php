@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use common\Models\User;
 
 /**
  * This is the model class for table "documents".
@@ -102,5 +103,25 @@ class Documents extends \yii\db\ActiveRecord
     public function getType0()
     {
         return $this->hasOne(TypeOfDocuments::className(), ['id' => 'type']);
+    }
+
+    /**
+     * Gets query for [[CreatedBy]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * Gets query for [[UpdatedBy]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
 }

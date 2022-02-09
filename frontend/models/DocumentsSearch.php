@@ -17,8 +17,8 @@ class DocumentsSearch extends Documents
     public function rules()
     {
         return [
-            [['id', 'type', 'created_by', 'updated_by', 'status'], 'integer'],
-            [['title', 'code', 'created_at', 'updated_at', 'filename'], 'safe'],
+            [['id', 'type', 'status'], 'integer'],
+            [['title', 'code', 'created_at', 'updated_at', 'filename', 'created_by', 'updated_by'], 'safe'],
         ];
     }
 
@@ -56,19 +56,27 @@ class DocumentsSearch extends Documents
             return $dataProvider;
         }
 
+           
+        $query->joinWith('createdBy','user');
+        $query->leftJoin('user_profile', '"user_profile"."user_id" = "user"."id"');
+               
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'id' => $this->id,  
             'type' => $this->type,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
+           // 'created_by' => $this->created_by,
+            //'updated_by' => $this->updated_by,
             'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['ilike', 'title', $this->title])
             ->andFilterWhere(['ilike', 'code', $this->code])
-            ->andFilterWhere(['ilike', 'created_at', $this->created_at])
-            ->andFilterWhere(['ilike', 'updated_at', $this->updated_at])
+            ->andFilterWhere(['ilike', 'user_profile.lastname', $this->created_by])
+            ->orFilterWhere(['ilike', 'user_profile.firstname', $this->created_by])
+            ->andFilterWhere(['ilike', 'user_profile.lastname', $this->updated_by])
+            ->orFilterWhere(['ilike', 'user_profile.firstname', $this->updated_by])
+            ->andFilterWhere(['ilike', 'documents.created_at', $this->created_at])
+            ->andFilterWhere(['ilike', 'documents.updated_at', $this->updated_at])
             ->andFilterWhere(['ilike', 'filename', $this->filename]);
 
         return $dataProvider;
