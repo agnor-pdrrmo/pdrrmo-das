@@ -58,7 +58,8 @@
     "yii2mod/yii2-swagger": "^1.1",
     "rmrevin/yii2-fontawesome": "^3.4",
     "kartik-v/yii2-widgets": "^3.4",
-    "trntv/yii2-file-kit": "^2.1"    
+    "trntv/yii2-file-kit": "^2.1",
+    "yiisoft/yii2-bootstrap": "^2.0"    
   },
   "require-dev": {
     "yiisoft/yii2-gii": "^2.0.0",

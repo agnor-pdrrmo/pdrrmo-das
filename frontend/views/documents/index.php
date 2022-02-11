@@ -7,6 +7,8 @@ use frontend\Models\Typeofdocuments;
 use common\Models\User;
 use common\Models\UserProfile;
 use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
+
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\Models\DocumentsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -24,6 +26,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <!--?php Pjax::begin(); ?-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <!--?php
+        $img = new Imagick(Yii::getAlias('@archived'.'/AcOfEORETyOd-164326422361f238df8c21c4.33003292-1643264223214.pdf'));
+        $img->resizeImage( 200, 200, imagick::FILTER_LANCZOS, 0);
+        //$img->writeImage(Yii::getAlias('@archived'.'/Newimg.jpg'));
+        $img->setImageFormat( "png" );
+        $blob = $img->getImageBlob();
+        echo '<img src="data:image/png;base64,'.base64_encode($blob).'"/>';
+    ?-->
+
+    <?php
+        Modal::begin([
+            'header' => '<h4>Preview</h4>',
+            'id'=>'modal',
+            'size'=>'modal-lg',
+        ]);
+
+        echo "<div> id='modalContent'></div>";
+
+        Modal::end();
+    ?>
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -34,19 +56,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'attribute' => 'pdf',
     
-                'format' => 'html',
+                'format' => 'raw',
     
                 'label' => 'File',
+ 
     
                 'value' => function ($data) {
+ 
+                     
+                    $img = new Imagick(Yii::getAlias('@archived/'.$data->filename.'.pdf[0]'));
+                    $img->resizeImage( 100, 100, imagick::FILTER_LANCZOS, 0);
+                    $img->setImageFormat( "png" );
+                    $blob = $img->getImageBlob();
+                    $image =  '<img src="data:image/png;base64,'.base64_encode($blob).'"/>';
     
-                    return Html::a('PDF', [
+                    return Html::a(Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image']) , [
                         'documents/pdf',
                         'id' => $data->id,
                     ], [
-                        'class' => 'btn btn-primary',
+                        //'class' => 'btn btn-primary',
                         'target' => '_blank',
-                    ]);                                
+                    ]);  
+                     
                    
                 },
                   
@@ -117,3 +148,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <!--?php Pjax::end(); ?-->
 
 </div>
+
+<?php $style= <<< CSS
+
+    html{
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+ CSS;
+ $this->registerCss($style);
+?>
