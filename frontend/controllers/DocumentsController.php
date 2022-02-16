@@ -174,6 +174,16 @@ class DocumentsController extends Controller
 
     }
 
+    public function actionPreview(){
+
+        $model = new Documents();  
+           
+        return $this->renderAjax('preview', [
+            'model' => $model,
+        ]);
+
+    }
+
     /**
      * Updates an existing Documents model.
      * If update is successful, the browser will be redirected to the 'view' page.

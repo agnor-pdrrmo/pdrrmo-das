@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
+//use yii\widgets\Pjax;
 use frontend\Models\Typeofdocuments;
 use common\Models\User;
 use common\Models\UserProfile;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\Models\DocumentsSearch */
@@ -20,33 +21,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <p>
-        <?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?>
+        <!--?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?-->
     </p>
 
     <!--?php Pjax::begin(); ?-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <!--?php
-        $img = new Imagick(Yii::getAlias('@archived'.'/AcOfEORETyOd-164326422361f238df8c21c4.33003292-1643264223214.pdf'));
-        $img->resizeImage( 200, 200, imagick::FILTER_LANCZOS, 0);
-        //$img->writeImage(Yii::getAlias('@archived'.'/Newimg.jpg'));
-        $img->setImageFormat( "png" );
-        $blob = $img->getImageBlob();
-        echo '<img src="data:image/png;base64,'.base64_encode($blob).'"/>';
-    ?-->
-
     <?php
         Modal::begin([
-            'header' => '<h4>Preview</h4>',
+            //'header' => '<h4>Preview</h4>',
             'id'=>'modal',
             'size'=>'modal-lg',
         ]);
 
-        echo "<div> id='modalContent'></div>";
+        echo "<div id='modalContent'></div>";
 
         Modal::end();
     ?>
     
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -70,13 +63,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     $blob = $img->getImageBlob();
                     $image =  '<img src="data:image/png;base64,'.base64_encode($blob).'"/>';
     
-                    return Html::a(Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image']) , [
-                        'documents/pdf',
-                        'id' => $data->id,
-                    ], [
-                        //'class' => 'btn btn-primary',
-                        'target' => '_blank',
-                    ]);  
+                    //return Html::a(Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview', 'id'=>$data->filename, 'value'=>Url::to("index.php?r=documents/create")]) , 
+                    //    ['documents/pdf','id' => $data->id],
+                    //    ['target' => '_blank'],
+                    //);
+                    return Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview ','cursor'=>'pointer', 'id'=>$data->filename]);  
                      
                    
                 },
@@ -149,13 +140,45 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<?php $style= <<< CSS
+<?php 
+$style= <<< CSS
 
     html{
         font-size: 1rem;
         line-height: 1.5;
     }
 
+    img{
+        cursor: pointer; 
+    }
+
  CSS;
  $this->registerCss($style);
+?>
+
+<?php
+
+$js = <<<JS
+    $(".preview").click(function(){
+        var imgId =this.id;
+        $.ajax({
+        url: "documents/preview",
+        type: "post",
+        data: '{"id":"' + imgId + '"}',
+        success: function (response) {
+           // You will get response from your PHP page (what you echo or print)
+           $('#modal').modal('show')
+           .find('#modalContent')
+           .html(response);
+           $("#modal").removeClass("fade");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            }
+        });
+    });
+JS;
+
+$this->registerJs($js);
+
 ?>

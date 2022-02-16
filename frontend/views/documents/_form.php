@@ -21,7 +21,7 @@ use frontend\Models\Typeofdocuments;
                     Typeofdocuments::find()->asArray()->all(),
                     'id',
                     function($model) {
-                        return $model['doc_des'];
+                        return $model['doc_name'];
                     }
                 );
         echo $form->field($model, 'type')->widget(Select2::classname(), [
