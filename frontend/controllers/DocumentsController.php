@@ -175,12 +175,20 @@ class DocumentsController extends Controller
     }
 
     public function actionPreview(){
+   
+        if ($this->request->isAjax) {
+            
+            $model = Documents::find()
+                ->where(['filename' => Yii::$app->request->post('filename')])
+                ->one();       
 
-        $model = new Documents();  
-           
-        return $this->renderAjax('preview', [
-            'model' => $model,
-        ]);
+            return $this->renderAjax('preview', [
+                'model' => $model,
+            ]);
+        }else{
+            throw new \yii\web\MethodNotAllowedHttpException();
+        }    
+        
 
     }
 

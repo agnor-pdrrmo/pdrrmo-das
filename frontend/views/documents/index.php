@@ -61,12 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $img->resizeImage( 100, 100, imagick::FILTER_LANCZOS, 0);
                     $img->setImageFormat( "png" );
                     $blob = $img->getImageBlob();
-                    $image =  '<img src="data:image/png;base64,'.base64_encode($blob).'"/>';
-    
-                    //return Html::a(Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview', 'id'=>$data->filename, 'value'=>Url::to("index.php?r=documents/create")]) , 
-                    //    ['documents/pdf','id' => $data->id],
-                    //    ['target' => '_blank'],
-                    //);
+
                     return Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview ','cursor'=>'pointer', 'id'=>$data->filename]);  
                      
                    
@@ -164,7 +159,7 @@ $js = <<<JS
         $.ajax({
         url: "documents/preview",
         type: "post",
-        data: '{"id":"' + imgId + '"}',
+        data: {"filename":imgId},
         success: function (response) {
            // You will get response from your PHP page (what you echo or print)
            $('#modal').modal('show')
