@@ -115,7 +115,7 @@ class DocumentsController extends Controller
     }
 
     
-    public function  actionPdf($id)
+    public function  actionPdf($filename)
     {
 
         /*
@@ -135,8 +135,7 @@ class DocumentsController extends Controller
         );
         */
         
-        $model = Documents::findOne($id);
-        $completePath = Yii::getAlias('@archived'.'/'.$model->filename.'.pdf');
+        $completePath = Yii::getAlias('@archived'.'/'.$filename.'.pdf');
 
         if(file_exists($completePath))
 
@@ -146,7 +145,7 @@ class DocumentsController extends Controller
 
             header('Content-type: application/pdf');
 
-            header('Content-Disposition: inline; filename="' . $model->filename . '"');
+            header('Content-Disposition: inline; filename="' . $filename . '"');
 
             header('Content-Transfer-Encoding: binary');
 

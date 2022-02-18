@@ -12,7 +12,6 @@ use frontend\Models\Typeofdocuments;
 ?>
 
 <div class="documents-preview">
-
   <?php
   
          $img = new Imagick(Yii::getAlias('@archived/'.$model->filename.'.pdf'));

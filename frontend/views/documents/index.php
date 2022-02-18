@@ -32,7 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //'header' => '<h4>Preview</h4>',
             'id'=>'modal',
             'size'=>'modal-lg',
+            'footer' => Html::a('Download PDF', '/ilisanan', ['class' => 'btn btn-primary download-pdf'],
+                ['target' => '_blank'],
+            ),
         ]);
+
+        //return Html::a(Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview', 'id'=>$data->filename, 'value'=>Url::to("index.php?r=documents/create")]) , 
+        //     ['documents/pdf','id' => $data->id],
+        //     ['target' => '_blank'],
+         //);
 
         echo "<div id='modalContent'></div>";
 
@@ -62,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $img->setImageFormat( "png" );
                     $blob = $img->getImageBlob();
 
-                    return Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview ','cursor'=>'pointer', 'id'=>$data->filename]);  
+                    return Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview ','cursor'=>'pointer', 'id'=>$data->filename, 'value'=>$data->id]);  
                      
                    
                 },
@@ -156,6 +164,7 @@ $style= <<< CSS
 $js = <<<JS
     $(".preview").click(function(){
         var imgId =this.id;
+
         $.ajax({
         url: "documents/preview",
         type: "post",
@@ -166,6 +175,8 @@ $js = <<<JS
            .find('#modalContent')
            .html(response);
            $("#modal").removeClass("fade");
+           $(".modal-dialog").addClass('modal-dialog-scrollable');
+           $("a.download-pdf").attr("href", "/documents/pdf?filename="+imgId);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
