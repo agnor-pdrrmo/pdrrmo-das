@@ -17,9 +17,9 @@ use yii\helpers\Url;
 $this->title = 'Documents';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+
 <div class="documents-index">
-
-
     <p>
         <!--?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?-->
     </p>
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'format' => 'html',
             ], 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],          
         ],
     ]); ?>
 
@@ -164,7 +164,6 @@ $style= <<< CSS
 $js = <<<JS
     $(".preview").click(function(){
         var imgId =this.id;
-
         $.ajax({
         url: "documents/preview",
         type: "post",
