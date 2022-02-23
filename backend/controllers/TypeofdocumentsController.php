@@ -68,19 +68,25 @@ class TypeofdocumentsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Typeofdocuments();
+        if (Yii::$app->user->can('admin') || Yii::$app->user->can('administrator')) {
+            $model = new Typeofdocuments();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($this->request->isPost) {
+                if ($model->load($this->request->post()) && $model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
+                $model->loadDefaultValues();
             }
+    
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         } else {
-            $model->loadDefaultValues();
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.')); 
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        
     }
 
     /**
@@ -92,15 +98,21 @@ class TypeofdocumentsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->user->can('admin') || Yii::$app->user->can('administrator')) {
+            $model = $this->findModel($id);
+
+            if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        } else {
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.')); 
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        
     }
 
     /**

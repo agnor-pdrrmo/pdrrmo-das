@@ -116,7 +116,7 @@ class DocumentsController extends Controller
     }
 
     
-    public function  actionPdf($id)
+    public function  actionPdf($filename)
     {
 
         /*
@@ -136,8 +136,7 @@ class DocumentsController extends Controller
         );
         */
         
-        $model = Documents::findOne($id);
-        $completePath = Yii::getAlias('@archived'.'/'.$model->filename.'.pdf');
+        $completePath = Yii::getAlias('@archived'.'/'.$filename.'.pdf');
 
         if(file_exists($completePath))
 
@@ -147,7 +146,7 @@ class DocumentsController extends Controller
 
             header('Content-type: application/pdf');
 
-            header('Content-Disposition: inline; filename="' . $model->filename . '"');
+            header('Content-Disposition: inline; filename="' . $filename . '"');
 
             header('Content-Transfer-Encoding: binary');
 
@@ -175,6 +174,25 @@ class DocumentsController extends Controller
 
     }
 
+    public function actionPreview(){
+   
+        if ($this->request->isAjax) {
+            
+            $model = Documents::find()
+                ->where(['filename' => Yii::$app->request->post('filename')])
+                ->one();       
+
+            return $this->renderAjax('preview', [
+                'model' => $model,
+            ]);
+        }else{
+            throw new \yii\web\MethodNotAllowedHttpException();
+        }    
+        
+
+    }
+
+    
     /**
      * Updates an existing Documents model.
      * If update is successful, the browser will be redirected to the 'view' page.
