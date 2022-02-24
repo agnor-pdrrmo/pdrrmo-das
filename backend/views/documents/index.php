@@ -7,7 +7,7 @@ use frontend\Models\Typeofdocuments;
 use common\Models\User;
 use common\Models\UserProfile;
 use yii\helpers\ArrayHelper;
-use yii\bootstrap\Modal;
+use yii\bootstrap4\Modal;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $img->setImageFormat( "png" );
                     $blob = $img->getImageBlob();
 
-                    return Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview ','cursor'=>'pointer', 'id'=>$data->filename, 'value'=>$data->id]);  
+                    return "<i id='loading' class='fa fa-spinner fa-pulse' style='display:none;'></i>".Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview ','cursor'=>'pointer', 'id'=>$data->filename, 'value'=>$data->id]);  
                      
                    
                 },
@@ -146,11 +146,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 $style= <<< CSS
 
-    html{
-        font-size: 1rem;
-        line-height: 1.5;
-    }
-
     img{
         cursor: pointer; 
     }
@@ -163,6 +158,7 @@ $style= <<< CSS
 
 $js = <<<JS
     $(".preview").click(function(){
+        $('#loading').show();
         var imgId =this.id;
         $.ajax({
         url: "documents/preview",
@@ -170,6 +166,7 @@ $js = <<<JS
         data: {"filename":imgId},
         success: function (response) {
            // You will get response from your PHP page (what you echo or print)
+           $('#loading').hide();
            $('#modal').modal('show')
            .find('#modalContent')
            .html(response);

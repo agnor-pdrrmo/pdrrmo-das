@@ -57,8 +57,8 @@ class Typeofdocuments extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['doc_name', 'doc_des'], 'required'],
-            [['doc_name', 'doc_des', 'created_at', 'updated_at'], 'string'],
+            [['doc_name', 'doc_des', 'code'], 'required'],
+            [['doc_name', 'doc_des', 'created_at', 'updated_at', 'code'], 'string'],
             [['created_by', 'updated_by'], 'default', 'value' => null],
             [['created_by', 'updated_by'], 'integer'],
         ];
@@ -77,6 +77,7 @@ class Typeofdocuments extends \yii\db\ActiveRecord
             'updated_by' => 'Updated By',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'code' => 'Document code', 
         ];
     }
 

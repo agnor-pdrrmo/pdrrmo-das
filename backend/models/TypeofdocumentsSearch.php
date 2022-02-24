@@ -18,7 +18,7 @@ class TypeofdocumentsSearch extends Typeofdocuments
     {
         return [
             [['id', 'created_by', 'updated_by'], 'integer'],
-            [['doc_name', 'doc_des', 'created_at', 'updated_at'], 'safe'],
+            [['doc_name', 'doc_des', 'created_at', 'updated_at', 'code'], 'safe'],
         ];
     }
 
@@ -66,7 +66,8 @@ class TypeofdocumentsSearch extends Typeofdocuments
         $query->andFilterWhere(['ilike', 'doc_name', $this->doc_name])
             ->andFilterWhere(['ilike', 'doc_des', $this->doc_des])
             ->andFilterWhere(['ilike', 'created_at', $this->created_at])
-            ->andFilterWhere(['ilike', 'updated_at', $this->updated_at]);
+            ->andFilterWhere(['ilike', 'updated_at', $this->updated_at])
+            ->andFilterWhere(['ilike', 'code', $this->code]);
 
         return $dataProvider;
     }
