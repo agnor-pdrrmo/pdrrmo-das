@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="documents-index">
     <p>
-        <!--?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?-->
+        <?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <!--?php Pjax::begin(); ?-->

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Typeofdocuments;
 use backend\models\TypeofdocumentsSearch;
+use backend\models\Documents;
 use yii\web\ForbiddenHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -133,6 +134,33 @@ class TypeofdocumentsController extends Controller
         
     }
 
+    public function actionCode($id){
+
+        if($this->request->isAjax){
+
+            $countDocuments = Documents::find()
+                ->count();
+
+            $countTypeDocuments = Typeofdocuments::find()
+                ->where(['id' => $id])
+                ->count();
+            
+            $codeTypeDocuments = Typeofdocuments::find()
+                ->where(['id' => $id])
+                ->one();
+
+            if($countTypeDocuments > 0 ){
+                echo $codeTypeDocuments->code.'-'.date("Y").'-'.$countDocuments;
+            }else{
+                echo '';
+            }
+
+        }else{
+            throw new \yii\web\MethodNotAllowedHttpException();
+        }
+       
+    }
+
     /**
      * Finds the Typeofdocuments model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -148,4 +176,5 @@ class TypeofdocumentsController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    
 }

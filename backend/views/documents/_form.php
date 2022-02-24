@@ -24,18 +24,30 @@ use backend\Models\Typeofdocuments;
                         return $model['doc_name'];
                     }
                 );
-        echo $form->field($model, 'type')->widget(Select2::classname(), [
+        /*echo $form->field($model, 'type')->widget(Select2::classname(), [
             'data' => $data,
             'options' => ['placeholder' => 'Select type of documents ...'],
             'pluginOptions' => [
                 'allowClear' => true
             ],
+            'htmlOptions' => array(
+                'onChange'=>
+            );
         ]);
+        */
+
+        echo $form->field($model, 'type')->dropDownList($data, 
+        ['prompt'=>'Select type of documents ...',
+        'onchange'=>'             
+                $.post( "'.urldecode(Yii::$app->urlManager->createUrl('typeofdocuments/code?id=')).'"+$(this).val(), function( data ) {
+                    $( "input#documents-code" ).val( data );
+                });
+        ']);
     ?>
 
-    <?= $form->field($model, 'title')->textArea(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'code')->textInput() ?>
+
+    <?= $form->field($model, 'title')->textArea(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'file')->fileInput() ?>
 
