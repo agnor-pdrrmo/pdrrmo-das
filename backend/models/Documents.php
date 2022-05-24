@@ -72,7 +72,8 @@ class Documents extends \yii\db\ActiveRecord
             [['code', 'created_at','filename', 'updated_at'], 'string'],
            // [['title'], 'string', 'max' => 250],
             [['code'], 'unique'],
-            [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf','maxSize' => 1024 * 1024 * 2],
+            [['file',],'required','on'=>['create','updatefile']],
+            [['file'], 'file', /*'skipOnEmpty' => false,*/ 'extensions' => 'pdf','maxSize' => 1024 * 1024 * 1024],
             [['type'], 'exist', 'skipOnError' => true, 'targetClass' => TypeOfDocuments::className(), 'targetAttribute' => ['type' => 'id']],
         ];
     }
