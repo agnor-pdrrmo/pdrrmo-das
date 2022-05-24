@@ -138,9 +138,7 @@ class TypeofdocumentsController extends Controller
 
         if($this->request->isAjax){
 
-            $countDocuments = Documents::find()
-                ->count();
-
+            
             $countTypeDocuments = Typeofdocuments::find()
                 ->where(['id' => $id])
                 ->count();
@@ -149,8 +147,12 @@ class TypeofdocumentsController extends Controller
                 ->where(['id' => $id])
                 ->one();
 
+             $countDocuments = Documents::find()
+                ->where(['like', 'code', $codeTypeDocuments->code . '%', false])
+                ->count();
+
             if($countTypeDocuments > 0 ){
-                echo $codeTypeDocuments->code.'-'.date("Y").'-'.$countDocuments;
+                echo $codeTypeDocuments->code.'-'.date("Y").'-'.++$countDocuments;
             }else{
                 echo '';
             }
