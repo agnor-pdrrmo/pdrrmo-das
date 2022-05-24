@@ -72,7 +72,7 @@ class DocumentsController extends Controller
     {
         
         $model = new Documents();
-       
+        $model->scenario = "create";
         
         if ($this->request->isPost) {
 
@@ -205,51 +205,53 @@ class DocumentsController extends Controller
         if (!Yii::$app->user->isGuest) {
 
             $model = $this->findModel($id);
+  
+                if ($this->request->isPost) {
 
-            //if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            //    return $this->redirect(['view', 'id' => $model->id]);
-           // }
+                    //$file = Yii::$app->request->post('Documents')['file'];
 
-           if ($this->request->isPost) {
+                    if(isset(Yii::$app->request->post('Documents')['file'])){
+                        
+                        $model->scenario = "updatefile";
 
-                if ($model->load($this->request->post())) { 
-                
-                    // parse filename using explode and concat
-                    $fileExplode = explode(" ", $model->title);
-                    $fileConcat = "";
-                    foreach ($fileExplode as $value) {
-                        $fileConcat = $fileConcat."".ucfirst(substr($value, 0, 2));
-                    }
-                    $fileConcat = $fileConcat."-".uniqid(time(), true)."-".time().rand(100,999);
-                    unset($value);
-
-                    //get the instance of the uploaded file         
-                    $model->file = UploadedFile::getInstance($model,'file');
-                    //setup value of filename
-                    $model->filename = $fileConcat;
-                    
-                    
-                    if($model->save()){
-                        //Save file in archived folder
-                        if($model->file->saveAs(Yii::getAlias('@archived').'/'.$fileConcat.'.'.$model->file->extension)){
-                            return $this->redirect(['view', 'id' => $model->id]);
+                        // parse filename using explode and concat
+                        $fileExplode = explode(" ", $model->title);
+                        $fileConcat = "";
+                        foreach ($fileExplode as $value) {
+                            $fileConcat = $fileConcat."".ucfirst(substr($value, 0, 2));
                         }
+                        $fileConcat = $fileConcat."-".uniqid(time(), true)."-".time().rand(100,999);
+                        unset($value);
+
+
+                        //get the instance of the uploaded file         
+                        $model->file = UploadedFile::getInstance($model,'file');
+                        //setup value of filename
+                        $model->filename = $fileConcat;
+
+                        if($model->save()){
+                            //Save file in archived folder
+                            if($model->file->saveAs(Yii::getAlias('@archived').'/'.$fileConcat.'.'.$model->file->extension)){
+                                return $this->redirect(['view', 'id' => $model->id]);
+                            }
+                        }else{
+                            //return $model->getErrors()['file'][0] == 'Upload documents cannot be blank';
+                            return $this->render('update', [
+                                'model' => $model,
+                            ]);
+                        }  
+
                     }else{
-                        return $this->render('update', [
-                            'model' => $model,
-                        ]);
-                    }               
+                        if($model->load($this->request->post()) && $model->save())
+                            return $this->redirect(['view', 'id' => $model->id]);   
+                    }
                     
                 }
-            } else {
+        
                 return $this->render('update', [
                     'model' => $model,
                 ]);
-            }
-    
-            //return $this->render('update', [
-            //    'model' => $model,
-            //]);
+           
         } else {
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.')); 
         }
