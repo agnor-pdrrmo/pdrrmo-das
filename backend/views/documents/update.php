@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="documents-update">
   
-    <?= $this->render('_form', [
+    <?= $this->render('_fupdate', [
         'model' => $model,
     ]) ?>
 
