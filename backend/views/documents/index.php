@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         //return Html::a(Html::img('data:image/png;base64,'.base64_encode($blob), ['alt' => 'My image','class' => 'border preview', 'id'=>$data->filename, 'value'=>Url::to("index.php?r=documents/create")]) , 
         //     ['documents/pdf','id' => $data->id],
         //     ['target' => '_blank'],
-         //);
+        //);
 
         echo "<div id='modalContent'></div>";
 
